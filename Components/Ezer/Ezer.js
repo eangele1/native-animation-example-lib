@@ -1,16 +1,19 @@
-import { View, StyleSheet, Platform } from "react-native";
-import React, { useEffect } from "react";
+import { View, StyleSheet, Platform, Button } from "react-native";
+import React, { useEffect, useState } from "react";
 import BottomSubView from "./BottomSubView";
 import TopSubView from "./TopSubView";
 import BounceButton from "./BounceButton";
 import Spinner from "./Spinner";
 import FadeBox from "./FadeBox";
 import MovableBox from "./MovableBox";
+import MarioJump from "./MarioJump";
 
 const isNative =
   Platform.OS === "android" || Platform.OS === "ios" ? true : false;
 
 export default function App() {
+  const [showChain, setShowChain] = useState(null);
+
   !isNative &&
     useEffect(() => {
       // left: 37, up: 38, right: 39, down: 40,
@@ -75,12 +78,33 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <FadeBox />
-      <Spinner />
-      <TopSubView />
-      <BottomSubView />
-      <BounceButton />
-      <MovableBox />
+      {showChain === null && (
+        <>
+          <Button
+            title="Show Chain Animation"
+            onPress={() => setShowChain(true)}
+          />
+          <Button
+            title="Show One-Off Animations"
+            onPress={() => setShowChain(false)}
+          />
+        </>
+      )}
+      {showChain !== null && showChain && (
+        <>
+          <MarioJump />
+        </>
+      )}
+      {showChain !== null && !showChain && (
+        <>
+          <FadeBox />
+          <Spinner />
+          <TopSubView />
+          <BottomSubView />
+          <BounceButton />
+          <MovableBox />
+        </>
+      )}
     </View>
   );
 }
